@@ -19,16 +19,17 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      color: white;
+      user-select: none;
+      font-family: Arial, sans-serif;
     }
 
     h1 {
       font-size: 100px;
-      font-family: Arial, sans-serif;
       font-weight: bold;
       animation: rgbColor 5s infinite linear;
       text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
       margin-bottom: 40px;
-      user-select: none;
     }
 
     @keyframes rgbColor {
@@ -46,10 +47,10 @@
       color: #fff;
       padding: 12px 20px;
       border-radius: 30px;
-      font-family: Arial, sans-serif;
       font-size: 16px;
       text-decoration: none;
       transition: background-color 0.3s, transform 0.2s;
+      z-index: 10;
     }
 
     .social-tab:hover {
@@ -57,27 +58,87 @@
       transform: scale(1.05);
     }
 
-    /* Hide the iframe visually but allow autoplay */
-    iframe {
-      position: fixed;
-      width: 0;
-      height: 0;
+    #playButton {
+      padding: 18px 50px;
+      font-size: 24px;
+      font-weight: 700;
+      border-radius: 40px;
       border: none;
-      opacity: 0;
-      pointer-events: none;
+      cursor: pointer;
       user-select: none;
+      background: linear-gradient(270deg, red, lime, blue);
+      background-size: 600% 600%;
+      animation: rgbBackground 8s ease infinite;
+      color: white;
+      box-shadow: 0 0 10px rgba(255,255,255,0.6);
+      transition: box-shadow 0.3s ease;
+      margin-bottom: 40px;
+    }
+
+    #playButton:hover {
+      box-shadow: 0 0 20px rgba(255,255,255,1);
+    }
+
+    @keyframes rgbBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    iframe {
+      display: none;
     }
   </style>
 </head>
 <body>
   <h1>willie5354</h1>
+  <button id="playButton">Play Music</button>
   <a class="social-tab" href="https://t.me/thegrandeliteus" target="_blank" rel="noopener noreferrer">Join us on Telegram</a>
 
-  <!-- Invisible YouTube player for background music -->
   <iframe
-    src="https://www.youtube.com/embed/C-da7_6sx_c?autoplay=1&mute=0&loop=1&playlist=C-da7_6sx_c"
+    id="ytPlayer"
+    src="https://www.youtube.com/embed/C-da7_6sx_c?enablejsapi=1&loop=1&playlist=C-da7_6sx_c"
     allow="autoplay"
     allowfullscreen
   ></iframe>
+
+  <script>
+    const playBtn = document.getElementById('playButton');
+    const iframe = document.getElementById('ytPlayer');
+    let player;
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('ytPlayer', {
+        events: {
+          'onReady': (event) => {
+            // Player ready
+          }
+        }
+      });
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!player) {
+        // Load YouTube IFrame API script
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
+
+        window.onYouTubeIframeAPIReady = () => {
+          player = new YT.Player('ytPlayer', {
+            events: {
+              'onReady': (event) => {
+                event.target.playVideo();
+              }
+            }
+          });
+        };
+      } else {
+        player.playVideo();
+      }
+      playBtn.style.display = 'none'; // Hide button after playing
+      iframe.style.display = 'block';  // Show iframe to start playing
+    });
+  </script>
 </body>
 </html>
