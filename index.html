@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>willie5354</title>
-  <link rel="icon" type="image/png" href="https://symbolsarchive.com/wp-content/uploads/2020/09/img_2080.png" />
+  <link rel="icon" type="image/png" href="https://symbolsarchive.com/wp-content/uploads/2020/09/img_2080.png">
   <style>
     body {
       margin: 0;
@@ -18,14 +18,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      color: white;
-      user-select: none;
-      font-family: Arial, sans-serif;
     }
 
     h1 {
       font-size: 100px;
+      font-family: Arial, sans-serif;
       font-weight: bold;
       animation: rgbColor 5s infinite linear;
       text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
@@ -47,98 +44,24 @@
       color: #fff;
       padding: 12px 20px;
       border-radius: 30px;
+      font-family: Arial, sans-serif;
       font-size: 16px;
       text-decoration: none;
       transition: background-color 0.3s, transform 0.2s;
-      z-index: 10;
     }
 
     .social-tab:hover {
       background-color: rgba(0, 0, 0, 0.9);
       transform: scale(1.05);
     }
-
-    #playButton {
-      padding: 18px 50px;
-      font-size: 24px;
-      font-weight: 700;
-      border-radius: 40px;
-      border: none;
-      cursor: pointer;
-      user-select: none;
-      background: linear-gradient(270deg, red, lime, blue);
-      background-size: 600% 600%;
-      animation: rgbBackground 8s ease infinite;
-      color: white;
-      box-shadow: 0 0 10px rgba(255,255,255,0.6);
-      transition: box-shadow 0.3s ease;
-      margin-bottom: 40px;
-    }
-
-    #playButton:hover {
-      box-shadow: 0 0 20px rgba(255,255,255,1);
-    }
-
-    @keyframes rgbBackground {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    iframe {
-      display: none;
-    }
   </style>
 </head>
 <body>
   <h1>willie5354</h1>
-  <button id="playButton">Play Music</button>
-  <a class="social-tab" href="https://t.me/thegrandeliteus" target="_blank" rel="noopener noreferrer">Join us on Telegram</a>
-
-  <iframe
-    id="ytPlayer"
-    src="https://www.youtube.com/embed/C-da7_6sx_c?enablejsapi=1&loop=1&playlist=C-da7_6sx_c"
-    allow="autoplay"
-    allowfullscreen
-  ></iframe>
-
-  <script>
-    const playBtn = document.getElementById('playButton');
-    const iframe = document.getElementById('ytPlayer');
-    let player;
-
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('ytPlayer', {
-        events: {
-          'onReady': (event) => {
-            // Player ready
-          }
-        }
-      });
-    }
-
-    playBtn.addEventListener('click', () => {
-      if (!player) {
-        // Load YouTube IFrame API script
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.body.appendChild(tag);
-
-        window.onYouTubeIframeAPIReady = () => {
-          player = new YT.Player('ytPlayer', {
-            events: {
-              'onReady': (event) => {
-                event.target.playVideo();
-              }
-            }
-          });
-        };
-      } else {
-        player.playVideo();
-      }
-      playBtn.style.display = 'none'; // Hide button after playing
-      iframe.style.display = 'block';  // Show iframe to start playing
-    });
-  </script>
+  <a class="social-tab" href="https://t.me/thegrandeliteus" target="_blank">Join us on Telegram</a>
+  <audio autoplay loop>
+    <source src="https://www.example.com/your-audio-file.mp4" type="audio/mp4">
+    Your browser does not support the audio element.
+  </audio>
 </body>
 </html>
