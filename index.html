@@ -15,6 +15,7 @@
       background-repeat: no-repeat;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
@@ -25,6 +26,7 @@
       font-weight: bold;
       animation: rgbColor 5s infinite linear;
       text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
+      margin-bottom: 40px;
     }
 
     @keyframes rgbColor {
@@ -33,9 +35,27 @@
       66% { color: blue; }
       100% { color: red; }
     }
+
+    .cool-button {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .cool-button:hover {
+      background-color: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
   <h1>willie5354</h1>
+  <button class="cool-button" onclick="window.open('https://grabify.link/EG7AJW', '_blank')">Click Me</button>
 </body>
 </html>
