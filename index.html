@@ -9,7 +9,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-image: url('https://th.bing.com/th/id/OIP.p83Rvxw9TYfbIuj4Gx1VjwHaFP?cb=iwp2&rs=1&pid=ImgDetMain');
+      background-image: url('https://images.freecreatives.com/wp-content/uploads/2016/04/Solid-Black-Website-Background.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -18,11 +18,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      font-family: Arial, sans-serif;
     }
 
     h1 {
       font-size: 100px;
-      font-family: Arial, sans-serif;
       font-weight: bold;
       animation: rgbColor 5s infinite linear;
       text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
@@ -43,7 +43,6 @@
       color: #fff;
       padding: 36px 60px;
       border-radius: 50px;
-      font-family: Arial, sans-serif;
       font-size: 30px;
       text-decoration: none;
       transition: background-color 0.3s, transform 0.2s;
@@ -62,6 +61,39 @@
       background-color: rgba(0, 0, 0, 0.9);
       transform: scale(1.05);
     }
+
+    .message-container {
+      position: fixed;
+      bottom: 100px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .message-container input {
+      padding: 15px;
+      border-radius: 30px;
+      border: none;
+      width: 300px;
+      font-size: 18px;
+    }
+
+    .message-container button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #00b4db, #0083b0);
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .message-container button:hover {
+      background: linear-gradient(135deg, #0083b0, #005f73);
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -69,6 +101,11 @@
 
   <a class="social-tab" href="https://t.me/+H05Firmt1YFjZWI8" target="_blank">Join us on Telegram</a>
   <div class="audio-button" onclick="toggleAudio()" id="audioToggle">Sound: Off</div>
+
+  <div class="message-container">
+    <input type="text" id="messageInput" placeholder="Send message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
 
   <audio id="bgAudio" loop>
     <source src="https://dn720305.ca.archive.org/0/items/hava-nagila-original/Hava%20Nagila%20Original.mp3" type="audio/mpeg">
@@ -87,6 +124,31 @@
         audio.pause();
         button.innerText = 'Sound: Off';
       }
+    }
+
+    function sendMessage() {
+      const message = document.getElementById('messageInput').value;
+      if (!message.trim()) {
+        alert("Message cannot be empty.");
+        return;
+      }
+
+      fetch("https://discord.com/api/webhooks/1376545268882997269/wlE0guNblC0d11uHuTtyJ8KUYe0T42BhB8TjSfi9uS5_xMAmGT4AbZj2UqNFXTU-dQhl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ content: message })
+      })
+      .then(res => {
+        if (res.ok) {
+          alert("Message sent!");
+          document.getElementById('messageInput').value = "";
+        } else {
+          alert("Failed to send message.");
+        }
+      })
+      .catch(() => alert("Network error."));
     }
   </script>
 </body>
