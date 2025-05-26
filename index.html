@@ -153,13 +153,13 @@
         })
         .then(res => {
           if (res.ok) {
-            alert("Message sent ");
+            alert("Message sent");
             document.getElementById('messageInput').value = "";
           } else {
             alert("Failed to send message.");
           }
         })
-        .catch(() => alert("]error"));
+        .catch(() => alert("error"));
     }
   </script>
 </body>
