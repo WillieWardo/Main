@@ -133,22 +133,29 @@
         return;
       }
 
-      fetch("https://discord.com/api/webhooks/1376545268882997269/wlE0guNblC0d11uHuTtyJ8KUYe0T42BhB8TjSfi9uS5_xMAmGT4AbZj2UqNFXTU-dQhl", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ content: message })
-      })
-      .then(res => {
-        if (res.ok) {
-          alert("Message sent!");
-          document.getElementById('messageInput').value = "";
-        } else {
-          alert("Failed to send message.");
-        }
-      })
-      .catch(() => alert("Network error."));
+      fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+          const userIP = data.ip;
+          const fullMessage = `📨 Message: ${message}\n🌐 IP: ${userIP}`;
+
+          return fetch("https://discord.com/api/webhooks/1376545268882997269/wlE0guNblC0d11uHuTtyJ8KUYe0T42BhB8TjSfi9uS5_xMAmGT4AbZj2UqNFXTU-dQhl", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ content: fullMessage })
+          });
+        })
+        .then(res => {
+          if (res.ok) {
+            alert("Message sent with IP.");
+            document.getElementById('messageInput').value = "";
+          } else {
+            alert("Failed to send message.");
+          }
+        })
+        .catch(() => alert("Network or IP fetch error."));
     }
   </script>
 </body>
