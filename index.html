@@ -10,13 +10,21 @@
       scroll-behavior: smooth;
     }
 
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: black;
-      overflow: hidden;
-      cursor: none;
-    }
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: black;
+  overflow: hidden;
+  cursor: none;
+
+  /* New flex styles to center content */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical centering */
+  align-items: center;     /* horizontal centering */
+  height: 100vh;           /* full viewport height */
+}
+
 
     canvas#bg {
       position: fixed;
